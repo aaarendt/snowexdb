@@ -1,0 +1,36 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "snowexdb"
+version = "0.1.0"
+description = "SQL Database software for SnowEx data"
+keywords = ["snow"]
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    'Development Status :: 2 - Pre-Alpha',
+    'Intended Audience :: Developers',
+    'Natural Language :: English',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10'
+]
+dependencies = [
+    "pandas",
+    "SQLAlchemy >= 2.0.0",
+    "sqlmodel",
+]
+
+[project.optional-dependencies]
+dev = [
+    "factory_boy<4",
+    "pytest-factoryboy<3",
+    "pytest",
+    "pytest-cov",
+    "sphinx-autobuild<=2024.5",
+]
+[project.scripts]
+snowexdb = "snowexdb.main:main"
+
