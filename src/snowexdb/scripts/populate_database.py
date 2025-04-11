@@ -1,12 +1,20 @@
+import csv
+import typer
+
 from snowexdb.repositories.base_repository import BaseRepository
 from snowexdb.models.instrument import Instrument
 from snowexdb.models.layer import Layer
 
-import csv
-
 from pathlib import Path
 
-INPUT_DIRECTORY = Path(__file__).parent / 'tests/data'
+import logging
+
+
+INPUT_DIRECTORY = Path(__file__).parent / 'resources/data'
+
+logger = logging.getLogger(__name__)
+
+db_populate_app = typer.Typer()
 
 
 def add_layer_data():
@@ -26,6 +34,7 @@ def add_layer_data():
                               comments = row["comments"], 
                               instrument_id = instrument.id)
             BaseRepository.add(csv_data)
+    logger.info("Layer Added Successfully")
 
 def add_instrument_data():
     """
@@ -39,12 +48,10 @@ def add_instrument_data():
             instrument = Instrument(name=row['name'],
                             model=row['model'],
                             specifications=row['specifications'])
-        BaseRepository.add(instrument)
+        BaseRepository.add(instrument)    
+    logger.info("Instrument Added Successfully")
     return instrument
 
-def main():
+@db_populate_app.command(help="Command to add layer data to the database")
+def add_layer_instrument():
     add_layer_data()
-
-if __name__ == "__main__":
-    main()
-   
