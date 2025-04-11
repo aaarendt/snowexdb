@@ -1,5 +1,5 @@
 import typer
-from snowexdb.scripts.popluate_database import db_populate_app
+from snowexdb.scripts.populate_database import db_populate_app
 
 # The parent app that will contain all child apps for different script types
 app = typer.Typer()
