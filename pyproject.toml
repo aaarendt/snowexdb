@@ -21,6 +21,7 @@ dependencies = [
     "pandas",
     "SQLAlchemy >= 2.0.0",
     "sqlmodel",
+    "typer",
 ]
 
 [project.optional-dependencies]
@@ -32,5 +33,5 @@ dev = [
     "sphinx-autobuild<=2024.5",
 ]
 [project.scripts]
-snowexdb = "snowexdb.main:main"
+snowexdb = "snowexdb.scripts.cli_app:app"
 
