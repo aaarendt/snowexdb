@@ -1,8 +1,9 @@
 from sqlmodel import Field
 from datetime import datetime
-from geoalchemy2 import Geometry 
+from geoalchemy2 import WKTElement, Geometry
+from snowexdb.models.base import Base
 
-class SingleLocationData:
+class SingleLocationData(Base):
     """
     Base class for point and layer data
 
@@ -21,5 +22,5 @@ class SingleLocationData:
 
     #date: datetime = Field(default=None)
     elevation: float|None = Field(default=None)
-    geom: Geometry|None = Field(sa_type=Geometry(geometry_type="POINT"), 
+    geom: WKTElement|None = Field(sa_type=Geometry(geometry_type="POINT"), 
                                 nullable=True)
