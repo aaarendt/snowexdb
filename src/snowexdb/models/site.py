@@ -7,7 +7,7 @@ from sqlmodel import Field, Relationship
 if TYPE_CHECKING:
     from snowexdb.models.layer import Layer
 
-class Site(Base, SingleLocationData, table=True):
+class Site(SingleLocationData, table=True):
     """
     Table stores Site data. Does not store data values,
     it only stores the site metadata.
@@ -31,5 +31,4 @@ class Site(Base, SingleLocationData, table=True):
     vegetation_height: str|None = Field(default=None)
     tree_canopy: str|None = Field(default=None)
     site_notes: str|None = Field(default=None)
-    
     layers: Optional["Layer"] | None = Relationship(back_populates="site")
