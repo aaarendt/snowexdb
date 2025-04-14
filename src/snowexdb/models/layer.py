@@ -2,10 +2,10 @@ import uuid
 from sqlmodel import Field, Relationship
 from snowexdb.models.base import Base
 from typing import Optional, TYPE_CHECKING
-from snowexdb.models.instrument import Instrument
 
 if TYPE_CHECKING:
     from snowexdb.models.instrument import Instrument
+    from snowexdb.models.site import Site
 
 class Layer(Base, table=True):
     """
@@ -46,5 +46,10 @@ class Layer(Base, table=True):
     value: str|None = Field(default=None, nullable=False, index=True)
     instrument_id: uuid.UUID | None = Field(default=None, 
                                        foreign_key="public.instruments.id")
+    site_id: uuid.UUID | None = Field(default=None, 
+                                      foreign_key="public.sites.id")
+    
     instrument: Optional["Instrument"] | None = \
+                Relationship(back_populates="layers")
+    site: Optional["Site"] | None = \
                 Relationship(back_populates="layers")
