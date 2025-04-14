@@ -24,6 +24,8 @@ def add_layer_data():
     Adds snow layer profile data to the database
     """
     instrument = add_instrument_data()
+    site = add_site_data()
+
     sample_layers = INPUT_DIRECTORY / 'layers.csv'
     
     with sample_layers.open(mode='r', newline='') as file:
@@ -34,7 +36,8 @@ def add_layer_data():
                               bottom_depth = row["bottom_depth"],
                               value = row["value"],
                               comments = row["comments"], 
-                              instrument_id = instrument.id)
+                              instrument_id = instrument.id,
+                              site_id = site.id)
             BaseRepository.add(csv_data)
     logger.info("Layer Added Successfully")
 
@@ -80,5 +83,4 @@ def add_layer():
 
 @db_populate_app.command(help="Add site data to the database")
 def add_site():
-    add_layer_data()
     add_site_data()
