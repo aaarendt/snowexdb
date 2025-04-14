@@ -6,7 +6,7 @@ from snowexdb.models.instrument import Instrument
 from snowexdb.models.layer import Layer
 from snowexdb.models.site import Site
 from snowexdb.utils.projection import create_geom
-
+from datetime import datetime
 from pathlib import Path
 
 import logging
@@ -68,6 +68,7 @@ def add_site_data():
                                       "latitude":row['latitude']})
             site = Site(name=row['site_name'], 
                         elevation=400,
+                        date = datetime.strptime(row['date'], '%m-%d-%Y'),
                         geom=coordinates['geom'])
         BaseRepository.add(site)    
     logger.info("Site Added Successfully")
