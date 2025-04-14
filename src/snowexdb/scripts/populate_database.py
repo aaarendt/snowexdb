@@ -4,6 +4,8 @@ import typer
 from snowexdb.repositories.base_repository import BaseRepository
 from snowexdb.models.instrument import Instrument
 from snowexdb.models.layer import Layer
+from snowexdb.models.site import Site
+from snowexdb.utils.projection import create_geom
 
 from pathlib import Path
 
@@ -45,13 +47,37 @@ def add_instrument_data():
     with metadata_file.open(mode='r', newline='') as file:
         csv_reader = csv.DictReader(file)
         for row in csv_reader:
-            instrument = Instrument(name=row['name'],
-                            model=row['model'],
-                            specifications=row['specifications'])
+            instrument = Instrument(name=row['instrument_name'],
+                            model=row['instrument_model'],
+                            specifications=row['instrument_specifications'])
         BaseRepository.add(instrument)    
     logger.info("Instrument Added Successfully")
     return instrument
 
+def add_site_data():
+    """
+    Adds site data to the database
+    """
+    metadata_file = INPUT_DIRECTORY / 'metadata.csv'
+
+    with metadata_file.open(mode='r', newline='') as file:
+        csv_reader = csv.DictReader(file)
+        for row in csv_reader:
+            coordinates = create_geom({"epsg":4326,
+                                      "longitude":row['longitude'],
+                                      "latitude":row['latitude']})
+            site = Site(name=row['site_name'], 
+                        elevation=400,
+                        geom=coordinates['geom'])
+        BaseRepository.add(site)    
+    logger.info("Site Added Successfully")
+    return site
+
 @db_populate_app.command(help="Command to add layer data to the database")
-def add_layer_instrument():
+def add_layer():
     add_layer_data()
+
+@db_populate_app.command(help="Add site data to the database")
+def add_site():
+    add_layer_data()
+    add_site_data()
