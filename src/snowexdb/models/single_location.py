@@ -10,17 +10,16 @@ class SingleLocationData(Base):
     Attributes
     ----------
     date : datetime
-        The date of the observation.
+        The date and time of the observation.
     elevation : float
         The elevation of the observation (m).    
     geom : Geometry, optional
-        A geometric representation of the cluster area, stored as a POLYGON 
-        type. This field uses the SQLAlchemy
-        `Geometry` type to store spatial data.
+        A geometric representation of the measurement, stored as a POINT 
+        type. This field uses the SQLAlchemy `Geometry` type 
+        to store spatial data.
     """
-    # Date of the measurement with time
-
-    #date: datetime = Field(default=None)
+   
+    date: datetime = Field(default=None)
     elevation: float|None = Field(default=None)
     geom: WKTElement|None = Field(sa_type=Geometry(geometry_type="POINT"), 
                                 nullable=True)
