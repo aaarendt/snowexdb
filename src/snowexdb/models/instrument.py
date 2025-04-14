@@ -1,7 +1,7 @@
 import uuid
 from sqlmodel import Field, Relationship
 from snowexdb.models.base import Base
-from typing import Optional, TYPE_CHECKING
+from typing import List, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from snowexdb.models.layer import Layer
@@ -33,5 +33,6 @@ class Instrument(Base, table=True):
     name: str|None = Field(nullable=False, index=True)
     model: str|None = Field(nullable=True)
     specifications: str|None = Field(nullable=True)
-    layers: Optional["Layer"] = Relationship(back_populates="instrument")
+
+    layers: List["Layer"] = Relationship(back_populates="instrument")
 
