@@ -45,11 +45,10 @@ def parse_csv_data(fname):
     updates?
     """
 
-    file_list = SnowExProfileData.DEFAULT_PRIMARY_VARIABLE_FILES + \
-    ["./overrides.yaml"]
-    my_vars = ExtendableVariables(file_list)
     profile_data = SnowExProfileDataCollection.from_csv(
         fname, allow_map_failure=True,
-        # primary_variable_files=file_list, 
+        metadata_variable_files=SnowExProfileData. \
+            DEFAULT_METADATA_VARIABLE_FILES + [ROOT_DIR + 
+                        "/scripts/resources/data/overrides_metadata.yaml"],
     )
     return profile_data
