@@ -1,0 +1,14 @@
+PIT COMMENTS:
+  code: pit_comments
+  description: Comments about the pit
+  map_from:
+  - Pit Comments
+  match_on_code: true
+  auto_remap: true
+PARAMETER CODES:
+  code: parameter_codes
+  description: Additional codes
+  map_from:
+  - Parameter Codes
+  match_on_code: true
+  auto_remap: true
