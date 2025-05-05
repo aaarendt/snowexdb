@@ -92,7 +92,7 @@ def add_density():
                                              "downloaded_file.csv")
                 for profile in profileData.profiles:
                     add_layer_data(profile.df, profile.metadata)
-                print("{} file imported!".format(file))
+                    logger.info("{} file imported!".format(file))
 
 # TODO: determine right level of loops to add the site and instrument data, 
 # not for each profile object as being done now
