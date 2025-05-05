@@ -14,6 +14,13 @@ engine = create_engine(postgresql_url, echo=False)
 
 SQLModel.metadata.create_all(engine)
 
+import earthaccess
+
+auth = earthaccess.login() # credentialing according to earthaccess website
+# https://earthaccess.readthedocs.io/en/latest/howto/authenticate/
+
+if not auth.authenticated:
+    auth.login(strategy="interactive", persist = True)
 
 # import os
 # import logging

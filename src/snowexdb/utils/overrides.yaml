@@ -1,0 +1,6 @@
+DENSITY:
+  code: rho
+  map_from:
+  - density
+  - density_mean
+  - and_map_from_this
