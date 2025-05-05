@@ -41,8 +41,6 @@ def parse_csv_data(fname):
         profile_data (obj): profile data object containing the observations
         and the metadata. 
     
-    Unclear why primary_variable_files not working - check latest insitupy
-    updates?
     """
 
     profile_data = SnowExProfileDataCollection.from_csv(
