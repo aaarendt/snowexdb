@@ -2,9 +2,14 @@ import uuid
 from snowexdb.models.single_location import SingleLocationData
 from typing import Optional, TYPE_CHECKING
 from sqlmodel import Field, Relationship
+from snowexdb.models.site_observers import SiteObserversLink
 
 if TYPE_CHECKING:
     from snowexdb.models.layer import Layer
+    from snowexdb.models.doi import DOI
+    from snowexdb.models.campaign import Campaign
+    from snowexdb.models.observers import Observer
+#    from snowexdb.models.site_observers import SiteObserversLink
 
 class Site(SingleLocationData, table=True):
     """
@@ -52,7 +57,25 @@ class Site(SingleLocationData, table=True):
         A relationship to the `Layer` model, with back_populates set to 
         "site", linking a layer measurement to the site at which it was 
         measured.
-        This is NOT a column in the table but represents relationship only.     
+        This is NOT a column in the table but represents relationship only. 
+    doi_id: uuid.UUID
+        Foreign key to the DOI table. 
+    doi : Optional[DOI]
+        A relationship to the `DOI` model, with back_populates set to 
+        "campaign_observations", linking a campaign observation 
+        to the DOI of the observation.
+        This is NOT a column in the table but represents relationship only. 
+    campaign_id: uuid.UUID
+        Foreign key to the Campaign table.
+    campaign : Optional[Campaign]
+        A relationship to the `Campaign` model, with back_populates set to 
+        "site", linking a site to the campaign it belongs to.
+        This is NOT a column in the table but represents relationship only.  
+    observers: List[Observer]
+        A relationship to the `observers` model, with back_populates 
+        set to "SiteObserversLink", linking sites to the observers via a link
+        table.
+        This is NOT a column in the table but represents relationship only.  
     """
 
     __tablename__ = 'sites'
@@ -75,3 +98,12 @@ class Site(SingleLocationData, table=True):
     tree_canopy: str|None = Field(default=None)
     site_notes: str|None = Field(default=None)
     layers: Optional["Layer"] | None = Relationship(back_populates="site")
+    doi_id: uuid.UUID | None = Field(default=None, 
+                                       foreign_key="public.dois.id")    
+    doi: Optional["DOI"] | None = Relationship(back_populates="site")
+    campaign_id: uuid.UUID | None = Field(default=None, 
+                                       foreign_key="public.campaigns.id")
+    campaign: Optional["Campaign"] | None = Relationship(back_populates="site")
+    observers: list["Observer"] = Relationship(back_populates="site",
+                                               link_model=SiteObserversLink)
+
