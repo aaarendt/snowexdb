@@ -5,6 +5,11 @@ from snowexdb.repositories.base_repository import BaseRepository
 from snowexdb.models.instrument import Instrument
 from snowexdb.models.layer import Layer
 from snowexdb.models.site import Site
+from snowexdb.models.campaign_observation import CampaignObservation
+from snowexdb.models.campaign import Campaign
+from snowexdb.models.doi import DOI
+from snowexdb.models.measurement_type import MeasurementType
+from snowexdb.models.observers import Observer
 from snowexdb.utils.projection import create_geom
 from pathlib import Path
 
@@ -16,6 +21,7 @@ from snowexdb.utils.access_data import NSIDC_access
 INPUT_DIRECTORY = Path(__file__).parent / 'resources/data'
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG) 
 
 db_populate_app = typer.Typer()
 
@@ -68,21 +74,84 @@ def add_site_data(site_metadata):
     Args:
         site_metadata (dict): dictionary of site metadata elements
     """
-
+    observer = Observer(name="Anthony")
     coordinates = create_geom({"epsg":4326,
                                 "longitude":site_metadata['longitude'],
                                 "latitude":site_metadata['latitude']})
     site = Site(name=site_metadata['name'], 
                 elevation=site_metadata['elevation'],
                 date=site_metadata['date'],
-                geom=coordinates['geom'])
+                geom=coordinates['geom'],
+                observers=[observer])
     BaseRepository.add(site)    
+    BaseRepository.add(observer)
     logger.info("Site Added Successfully")
     return site
 
+def add_campaign_observation_data(site_metadata):
+    """
+    Adds campaign observation data to the database
+
+    Args:
+        site_metadata (dict): dictionary of site metadata elements
+    """
+    doi = "10.5067/KZ43HVLZV6G4" # temporary, for testing
+    doi_entry = add_doi_data(site_metadata,doi)  
+    campaign = add_campaign_data(site_metadata)
+    measurement_type = add_measurement_type_data("density") # temporary hard coded
+    campaign_observation = CampaignObservation(
+                           name=site_metadata.campaign_name, 
+                           date=site_metadata.date_time,
+                           doi_id=doi_entry.id,
+                           campaign_id=campaign.id,
+                           measurement_type_id=measurement_type.id)
+    BaseRepository.add(campaign_observation)    
+    logger.info("Campaign Observation Added Successfully")
+    return campaign_observation
+
+def add_doi_data(site_metadata,doi):
+    """
+    Adds DOI data to the database
+
+    Args:
+        doi (str): the DOI to be added # temporary
+    """
+
+    doi_entry = DOI(doi=doi,
+                    date_accessed=site_metadata.date_time)
+    BaseRepository.add(doi_entry)
+    logger.info("DOI Added Successfully")
+    return doi_entry
+
+def add_campaign_data(site_metadata):
+    """
+    Adds campaign data to the database
+
+    Args:
+        metadata (object): the metadata associated with the campaign data
+    """
+    campaign = Campaign(name=site_metadata.campaign_name)
+    BaseRepository.add(campaign)    
+    logger.info("Campaign Data Added Successfully")
+    return campaign
+
+def add_measurement_type_data(type):
+    """
+    Adds measurement type data to the database
+
+    Args:
+        metadata (object): the metadata associated with the measurement type data
+    """
+    measurement_type = MeasurementType(name=type)
+    BaseRepository.add(measurement_type)    
+    logger.info("Measurement Type Data Added Successfully")
+    return measurement_type
+    
+
 @db_populate_app.command(help="Add density data to the database")
 def add_density():
-    collections = NSIDC_access("10.5067/KZ43HVLZV6G4")
+    doi = "10.5067/KZ43HVLZV6G4" # temporary, for testing
+    collections = NSIDC_access(doi)
     for collection in collections:
         files = collection.data_links("Data")
         for file in files:
@@ -93,7 +162,9 @@ def add_density():
                 for profile in profileData.profiles:
                     add_layer_data(profile.df, profile.metadata)
                     logger.info("{} file imported!".format(file))
-
+                    campaign_obs = add_campaign_observation_data(
+                                                profile.metadata)
+    
 # TODO: determine right level of loops to add the site and instrument data, 
 # not for each profile object as being done now
 
