@@ -9,17 +9,17 @@ if TYPE_CHECKING:
 
 class MeasurementType(Base, table=True):
     """
-    Represents a single campaign in the 'public.campaigns' table.
+    Represents a single measurement in the 'public.measurement_type' table.
 
     Attributes
     ----------
     id : uuid.UUID
-        The unique identifier for the instrument,
+        The unique identifier for the measurement type,
         generated automatically using UUID.
     name : str|None
-        The name of the campaign.
+        The name of the measurement type.
     units: str|None
-        The units of measurement for the campaign.
+        The units of measurement for the observation.
     derived: bool|None = Field()
         TRUE if the measurement type is derived
         FALSE if the measurement type is not derived

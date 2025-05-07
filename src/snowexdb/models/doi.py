@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 class DOI(Base, table=True):
     """
-    Represents a single instrument in the 'public.instruments' table.
+    Represents a single doi in the 'public.dois' table.
 
     Attributes
     ----------

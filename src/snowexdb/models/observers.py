@@ -10,12 +10,12 @@ if TYPE_CHECKING:
     
 class Observer(Base, table=True):
     """
-    Represents a single instrument in the 'public.instruments' table.
+    Represents a single observer in the 'public.observers' table.
 
     Attributes
     ----------
     id : uuid.UUID
-        The unique identifier for the instrument,
+        The unique identifier for the observer,
         generated automatically using UUID.
     name : str|None
         The name of the observer.
