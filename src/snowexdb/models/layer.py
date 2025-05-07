@@ -6,6 +6,7 @@ from typing import Optional, TYPE_CHECKING
 if TYPE_CHECKING:
     from snowexdb.models.instrument import Instrument
     from snowexdb.models.site import Site
+    from snowexdb.models.measurement_type import MeasurementType
 
 class Layer(Base, table=True):
     """
@@ -45,11 +46,14 @@ class Layer(Base, table=True):
     comments: str|None = Field(nullable=True)
     value: str|None = Field(default=None, nullable=False, index=True)
     instrument_id: uuid.UUID | None = Field(default=None, 
-                                       foreign_key="public.instruments.id")
-    site_id: uuid.UUID | None = Field(default=None, 
-                                      foreign_key="public.sites.id")
-    
+                                       foreign_key="public.instruments.id")    
     instrument: Optional["Instrument"] | None = \
                 Relationship(back_populates="layers")
+    site_id: uuid.UUID | None = Field(default=None, 
+                                      foreign_key="public.sites.id")
     site: Optional["Site"] | None = \
+                Relationship(back_populates="layers")
+    measurement_type_id: uuid.UUID | None = Field(default=None, 
+                                      foreign_key="public.measurement_type.id")
+    measurement_type: Optional["MeasurementType"] | None = \
                 Relationship(back_populates="layers")
