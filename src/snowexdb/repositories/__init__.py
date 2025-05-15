@@ -6,9 +6,11 @@ from snowexdb.models import *
 load_dotenv() # credentials come from a local .env file
 
 postgresql_url = "postgresql+psycopg2://{username}:{password}@" \
-                 "localhost:5432/snwql". \
+                 "{hostname}:5432/{database}". \
                   format(username = os.getenv('USERNAME'),
-                        password = os.getenv('PASSWORD'))
+                        password = os.getenv('PASSWORD'),
+                        hostname = os.getenv('HOSTNAME'),
+                        database = os.getenv('DATABASE'))
 
 engine = create_engine(postgresql_url, echo=False)
 
