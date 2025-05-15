@@ -23,3 +23,8 @@ class SingleLocationData(Base):
     elevation: float|None = Field(default=None)
     geom: WKTElement|None = Field(sa_type=Geometry(geometry_type="POINT"), 
                                 nullable=True)
+    # custom serializer for WKTElement
+    class Config:
+        json_encoders = {
+            WKTElement: lambda v: v.desc if v is not None else None
+        }
