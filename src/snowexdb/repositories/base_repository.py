@@ -25,8 +25,10 @@ class BaseRepository:
     @classmethod
     def spatial_select(cls, from_table: Type[T], bbox) -> list[T]:
         with Session(BaseRepository.repository_engine) as session:
-            statement = select(from_table). \
-            where(from_table.geom.ST_Within(bbox))
+            statement = (
+                select(from_table)
+                .where(from_table.geom.ST_Within(bbox))
+            )
             results = session.exec(statement)
             return results.all()
         
