@@ -15,7 +15,7 @@ from pathlib import Path
 
 import logging
 import tempfile
-
+import os
 from snowexdb.utils.data_parser import download_csv, parse_csv_data
 from snowexdb.utils.access_data import NSIDC_access
 
@@ -159,8 +159,9 @@ def add_density():
             if "density" in file:
                 with tempfile.TemporaryDirectory() as TEMPORARY_DIRECTORY:
                     download_csv(file, TEMPORARY_DIRECTORY)
-                    profileData = parse_csv_data(TEMPORARY_DIRECTORY +
-                                            "/downloaded_file.csv")
+                    profileData = parse_csv_data(os.path.join(
+                                                 TEMPORARY_DIRECTORY,
+                                                 "downloaded_file.csv"))
                     for profile in profileData.profiles:
                         add_layer_data(profile.df, profile.metadata)
                         logger.info("{} file imported!".format(file))

@@ -22,7 +22,7 @@ def download_csv(csv_url, directory):
     """
     response = requests.get(csv_url)
     if response.status_code == 200:
-        with open(directory + "/downloaded_file.csv", "wb") as f:
+        with open(os.path.join(directory, "downloaded_file.csv"), "wb") as f:
             f.write(response.content)
     else:
         print(f"Failed to download the file. Status code: \
