@@ -9,7 +9,7 @@ import os
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-def download_csv(csv_url):
+def download_csv(csv_url, directory):
     """
     Download CSV file from the given URL
 
@@ -22,8 +22,7 @@ def download_csv(csv_url):
     """
     response = requests.get(csv_url)
     if response.status_code == 200:
-        with open(ROOT_DIR + 
-                  "/scripts/resources/data/downloaded_file.csv", "wb") as f:
+        with open(directory + "/downloaded_file.csv", "wb") as f:
             f.write(response.content)
     else:
         print(f"Failed to download the file. Status code: \

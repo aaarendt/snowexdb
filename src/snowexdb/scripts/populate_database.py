@@ -14,6 +14,7 @@ from snowexdb.utils.projection import create_geom
 from pathlib import Path
 
 import logging
+import tempfile
 
 from snowexdb.utils.data_parser import download_csv, parse_csv_data
 from snowexdb.utils.access_data import NSIDC_access
@@ -156,13 +157,14 @@ def add_density():
         files = collection.data_links("Data")
         for file in files:
             if "density" in file:
-                download_csv(file)
-                profileData = parse_csv_data(INPUT_DIRECTORY / 
-                                             "downloaded_file.csv")
-                for profile in profileData.profiles:
-                    add_layer_data(profile.df, profile.metadata)
-                    logger.info("{} file imported!".format(file))
-                    campaign_obs = add_campaign_observation_data(
+                with tempfile.TemporaryDirectory() as TEMPORARY_DIRECTORY:
+                    download_csv(file, TEMPORARY_DIRECTORY)
+                    profileData = parse_csv_data(TEMPORARY_DIRECTORY +
+                                            "/downloaded_file.csv")
+                    for profile in profileData.profiles:
+                        add_layer_data(profile.df, profile.metadata)
+                        logger.info("{} file imported!".format(file))
+                        campaign_obs = add_campaign_observation_data(
                                                 profile.metadata)
     
 # TODO: determine right level of loops to add the site and instrument data, 
