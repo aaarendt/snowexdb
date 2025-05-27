@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from snowexdb.models.campaign import Campaign
     from snowexdb.models.measurement_type import MeasurementType
     from snowexdb.models.observers import Observer
+    from snowexdb.models.point import Point
 
 class CampaignObservation(Base, table=True):
     """
@@ -89,4 +90,6 @@ class CampaignObservation(Base, table=True):
     observers_id: uuid.UUID | None = Field(default=None, 
                                        foreign_key="public.observers.id")
     observers: Optional["Observer"] | None = \
+                Relationship(back_populates="campaign_observations")
+    point_campaign: Optional["Point"] | None = \
                 Relationship(back_populates="campaign_observations")
