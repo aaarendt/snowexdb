@@ -8,6 +8,7 @@ from snowexdb.models.campaign import Campaign
 from snowexdb.models.measurement_type import MeasurementType
 from snowexdb.models.observers import Observer
 from snowexdb.models.site_observers import SiteObserversLink
+from snowexdb.models.point import Point
 
 # New models created should be exposed by adding to __all__. This is used by SQLModel.metadata
 # https://sqlmodel.tiangolo.com/tutorial/create-db-and-table/#sqlmodel-metadata-order-matters
@@ -22,4 +23,5 @@ __all__ = [
     "MeasurementType",
     "Observer",
     "SiteObserversLink",
+    "Point",
 ]

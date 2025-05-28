@@ -10,6 +10,7 @@ from snowexdb.models.campaign import Campaign
 from snowexdb.models.doi import DOI
 from snowexdb.models.measurement_type import MeasurementType
 from snowexdb.models.observers import Observer
+from snowexdb.models.point import Point
 from snowexdb.utils.projection import create_geom
 from pathlib import Path
 
@@ -51,6 +52,32 @@ def add_layer_data(profile_df, metadata):
                           site_id=site.id)
         BaseRepository.add(data)
     logger.info("Layer Added Successfully")
+
+
+def add_point_data(profile_df, metadata):
+    """
+    Adds point data to the database
+
+    Args:
+        profile_df (dataframe): the dataframe of observations
+        metadata (object): the metadata associated with the profile data
+    """
+    campaign_obs = add_campaign_observation_data(metadata)
+    
+    for index, row in profile_df.iterrows():
+        data = Point(
+            version_number=2,
+            equipment="test_equipment",  # temporary hard coded
+            units="kg m-3",  # temporary hard coded
+            value=str(row["density"]),
+            campaign_observation_id=campaign_obs.id,
+            elevation=400,  # temporary
+            name=metadata.site_name,
+            date=metadata.date_time
+        )
+        BaseRepository.add(data)
+    logger.info("Point Added Successfully")
+
 
 def add_instrument_data():
     """
@@ -147,8 +174,7 @@ def add_measurement_type_data(type):
     BaseRepository.add(measurement_type)    
     logger.info("Measurement Type Data Added Successfully")
     return measurement_type
-    
-
+      
 @db_populate_app.command(help="Add density data to the database")
 def add_density():
     doi = "10.5067/KZ43HVLZV6G4" # temporary, for testing
@@ -163,10 +189,10 @@ def add_density():
                                                  TEMPORARY_DIRECTORY,
                                                  "downloaded_file.csv"))
                     for profile in profileData.profiles:
-                        add_layer_data(profile.df, profile.metadata)
+                        add_point_data(profile.df, profile.metadata)
                         logger.info("{} file imported!".format(file))
-                        campaign_obs = add_campaign_observation_data(
-                                                profile.metadata)
+
+    
     
 # TODO: determine right level of loops to add the site and instrument data, 
 # not for each profile object as being done now
