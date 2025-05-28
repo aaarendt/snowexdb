@@ -13,7 +13,7 @@ class Point(SingleLocationData, table=True):
     Attributes
     ----------
     id : uuid.UUID
-        The unique identifier for the user role, 
+        The unique identifier for the point entity, 
         generated automatically using UUID.
     version_number : int|None
         The version number of the point observation.
