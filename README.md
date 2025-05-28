@@ -2,7 +2,7 @@
 
 This is an exercise in replicating database creation for the
  NASA SnowEx datasets, following https://github.com/SnowEx/snowexsql and 
-https://github.com/SnowEx/snowex_db. The goal is to can learn new tools such as
+https://github.com/SnowEx/snowex_db. The goal is to learn new tools such as
 [SQLModel](https://sqlmodel.tiangolo.com/) 
 and [FastAPI](https://fastapi.tiangolo.com/), 
 as well as alternative database design patterns.
