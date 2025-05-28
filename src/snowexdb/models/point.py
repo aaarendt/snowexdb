@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 
 class Point(SingleLocationData, table=True):
     """
-    Represents the ppoints table that holds all the point data.
+    Represents the points table that holds all the point data.
 
     Attributes
     ----------
